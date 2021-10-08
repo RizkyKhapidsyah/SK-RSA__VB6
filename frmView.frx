@@ -1,0 +1,54 @@
+ÿ
+How RSA Works
+=============
+We begin with choosing two random large distinct primes p and q. We 
+also pick e, a random integer that is relatively prime to (p-1)*(q-1). The 
+random integer e is the encryption exponent. Let n = p*q. Using Euclid's 
+greatest common divisor algorithm, one can compute d, the decryption 
+exponent, such that: 
+e*d = 1 (mod (p-1)*(q-1)) 
+Both plaintext m and ciphertext c should be in the set of nonnegative 
+integers. Furthermore, before encrypting a plaintext message m, we need 
+to make sure that 0 <= m < n. If m is greater than the modulus n, the result 
+c of the encryption will not be a unique one-to-one mapping from m to c. 
+From one of the theorems of Euler's, we know that for all integers m, 
+med = m (mod n) 
+Therefore, provided that 0 <= m < n, 
+med (mod n) = m 
+To encrypt a message m, we perform the following algorithm: 
+Ek(m) = me (mod n) = c
+where Ek( ) denotes the encryption algorithm. 
+To decipher the ciphertext c with the private key d, we perform the 
+following algorithm: 
+Dk(c) = cd (mod n) = med (mod n) = m1 (mod n) = m 
+where Dk( ) denotes the decryption algorithm. 
+The pair (e, n) make up the public-key of the RSA Cryptosystem. 
+Everyone can use the pair (e, n) to encrypt a message. For example, Alice 
+can publish her (e, n) public-key pair on the network. When Bob wants to 
+send a secret message to Alice, he finds Alice's public-key set (e, n) from 
+the network and encrypts his message using Alice's public-key: c = me 
+(mod n). 
+p, q, and d make up Alice's private-key. Only Alice knows p, q, and d. A 
+third party, Carol, cannot understand what Bob wrote Alice because Carol 
+does not have the private-key. When Alice gets the message from Bob, 
+she decrypts it using her private-key set d, n by performing cd (mod n) = 
+m. 
+Without knowing d, one cannot decrypt the ciphertext c and get message 
+m back. To get d, one needs to know (p-1)*(q-1) in order to find d from the 
+equation e*d = 1 (mod (p-1)*(q-1)). Furthermore, to get (p-1)*(q-1), one 
+needs to first be able to factor the large number n into its primes p and q. 
+Since all the numbers involved are very large numbers, we can say that it 
+is essentially computationally impossible for an illegitimate party to obtain d, 
+and thus decrypt the ciphertext. 
+
+· RSA Example
+
+Given p = 29, q = 31, e = 13, m = 123;
+
+==>We compute: n = p * q = 899
+(p-1)*(q-1) = 840
+d = 517 since e*d = 13*517 = 8*(p-1)*(q-1) + 1
+To encrypt, 
+c = 123^13 (mod 899) = 402
+And to decrypt, 
+m = 402^517 (mod 899) = 123
